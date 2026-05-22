@@ -55,10 +55,11 @@ the Options menu.
 
 ## Building
 
-Source code is available at: https://github.com/LateGator/MacWolfSDL/
+Source code is available at: https://github.com/kaylagator/MacWolfSDL/
 
 CMake and SDL3 are required to build. SDL3 will be downloaded automatically if
-it is not present on the system.
+it is not present on the system. An XDG Desktop Portal backend is required at
+runtime on Linux for file dialogs to be displayed.
 
 ```bash
 cmake -B build . && cmake --build build
