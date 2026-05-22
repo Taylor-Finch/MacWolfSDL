@@ -143,10 +143,10 @@ exit_t RunAutoMap(void)
 		if ((newjoy & JOYPAD_UP) && vy) {
 			--vy;
 		}
-		if ((newjoy & JOYPAD_LFT) && vx) {
+		if ((newjoy & JOYPAD_LFT + JOYPAD_TL) && vx) {
 			--vx;
 		}
-		if ((newjoy & JOYPAD_RGT) && vx<(MAPSIZE-1)) {
+		if ((newjoy & JOYPAD_RGT + JOYPAD_TR) && vx<(MAPSIZE-1)) {
 			++vx;
 		}
 		if ((newjoy & JOYPAD_DN) && vy <(MAPSIZE-1)) {
