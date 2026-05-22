@@ -28,6 +28,7 @@ Word SystemState=SfxActive|MusicActive;				/* Sound on/off flags */
 Boolean FullScreen=0;			/* Fullscreen toggle */
 Byte ScreenScaleMode=0;			/* Scale/stretch select */
 Boolean ScreenFilter=0;			/* Scale/stretch select */
+Boolean ScreenVSync=0;			/* VSync select */
 Word KilledSong;				/* Song that's currently playing */
 LongWord LastTick;				/* Last system tick (60hz) */
 Word FontX;						/* X Coord of font */

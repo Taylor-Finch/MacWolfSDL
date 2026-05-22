@@ -57,6 +57,7 @@ extern Word SystemState;
 extern Boolean FullScreen;
 extern Byte ScreenScaleMode;
 extern Boolean ScreenFilter;
+extern Boolean ScreenVSync;
 extern Word VideoWidth;
 extern LongWord LastTick;
 extern LongWord YTable[480];

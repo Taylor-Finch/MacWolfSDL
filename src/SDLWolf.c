@@ -876,6 +876,7 @@ int ReadMenuJoystick(void)
 void UpdateVideoSettings(void)
 {
 	SDL_SetTextureScaleMode(FramebufferTexture, ScreenFilter);
+	SDL_SetRenderVSync(SdlRenderer, ScreenVSync);
 }
 
 static void InitMacFont(void)
@@ -1596,6 +1597,8 @@ static int PrefsIniHandler(void* User, const char* Section, const char* Name, co
 			if (GameViewSize > 3) GameViewSize = 3;
 		} else if (SDL_strcasecmp(Name, "filter") == 0) {
 			ScreenFilter = StrToBool(Value);
+		} else if (SDL_strcasecmp(Name, "vsync") == 0) {
+			ScreenVSync = StrToBool(Value);
 		}
 	} else if (SDL_strcasecmp(Section, "keys") == 0) {
 		for (i = 0; i < ARRAYLEN(KeyBinds); i++) {
@@ -1647,6 +1650,7 @@ void LoadPrefs(void)
 	difficulty = 2;				/* Medium difficulty */
 	ScreenScaleMode = 0;
 	ScreenFilter = 0;
+	ScreenVSync = 0;
 
 	Storage = PrefStorage();
 	if (!Storage)
@@ -1705,6 +1709,7 @@ void SavePrefs(void)
 	B += snprintf(B, End - B, "FullScreen = %d\n", FullScreen);
 	B += snprintf(B, End - B, "ScaleMode = %d\n", ScreenScaleMode);
 	B += snprintf(B, End - B, "Filter = %d\n", ScreenFilter);
+	B += snprintf(B, End - B, "VSync = %d\n", ScreenVSync);
 	B += snprintf(B, End - B, "\n");
 	B += snprintf(B, End - B, "[Keys]\n");
 	for (i = 0; i < ARRAYLEN(KeyBinds); i++)

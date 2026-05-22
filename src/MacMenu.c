@@ -889,10 +889,10 @@ int DoMenuCommand(int Menu, int Item)
 
 static const Rect VideoDialogRect = {0, 0, 166, 318};
 static const Rect ScreenButtonRect = {0, 0, 20, 88};
-static const Rect ScreenFilterRect = {0, 0, 14, 88};
+static const Rect ScreenCheckRect = {0, 0, 15, 88};
 static const Rect ScreenDoneRect = {0, 0, 20, 50};
 
-static widget_t ScreenButtons[9] = {
+static widget_t ScreenButtons[10] = {
 	{&ButtonClass, {0}, "320 x 200"},
 	{&ButtonClass, {0}, "512 x 384"},
 	{&ButtonClass, {0}, "640 x 400"},
@@ -901,6 +901,7 @@ static widget_t ScreenButtons[9] = {
 	{&ButtonClass, {0}, "Scale"},
 	{&ButtonClass, {0}, "Stretch"},
 	{&CheckBoxClass, {0}, "Filtering"},
+	{&CheckBoxClass, {0}, "V-Sync"},
 	{&ButtonClass, {0}, "Done"},
 };
 
@@ -928,12 +929,13 @@ static void InitVideoDialog(void)
 	X += 24;
 	Y += 30;
 
-	ScreenButtons[7].rect = RectOff(&ScreenFilterRect, X, Y);
+	ScreenButtons[7].rect = RectOff(&ScreenCheckRect, X, Y);
+	ScreenButtons[8].rect = RectOff(&ScreenCheckRect, X+88, Y);
 
 	X += 180;
 	Y -= 3;
 
-	ScreenButtons[8].rect = RectOff(&ScreenDoneRect, X, Y);
+	ScreenButtons[9].rect = RectOff(&ScreenDoneRect, X, Y);
 }
 
 static int RunVideoDialog(int Click, Boolean Moved)
@@ -975,9 +977,16 @@ static int RunVideoDialog(int Click, Boolean Moved)
 			MenuScrollY = ScreenScaleMode + 4;
 		if (joystick1 & JOYPAD_LFT)
 			MenuScrollY = 7;
+		if (joystick1 & JOYPAD_RGT)
+			MenuScrollY = 9;
+	} else if (MenuPosY == 9) {
+		if (joystick1 & JOYPAD_UP)
+			MenuScrollY = ScreenScaleMode + 4;
+		if (joystick1 & JOYPAD_LFT)
+			MenuScrollY = 8;
 	}
 	if (Moved || Click == 1) {
-		i = ClickWidgets(ScreenButtons, 9, mousex, mousey, NULL);
+		i = ClickWidgets(ScreenButtons, 10, mousex, mousey, NULL);
 		if (i >= 0) {
 			MenuScrollY = i;
 			if (Click == 1)
@@ -1021,7 +1030,12 @@ TryIt:
 		UpdateVideoSettings();
 		SavePrefs();
 		return 1;
-	} else if (Selected == 8)
+	} else if (Selected == 8) {
+		ScreenVSync ^= 1;
+		UpdateVideoSettings();
+		SavePrefs();
+		return 1;
+	} else if (Selected == 9)
 		return -1;
 	if (MenuScrollY != MenuPosY) {
 		MenuPosY = MenuScrollY;
@@ -1045,7 +1059,8 @@ static void DrawVideoDialog(void)
 	RenderWidgets(&ScreenButtons[0], 4, GameViewSize, MenuPosY, NULL);
 	RenderWidgets(&ScreenButtons[4], 3, ScreenScaleMode, MenuPosY-4, NULL);
 	RenderWidgets(&ScreenButtons[7], 1, (int)ScreenFilter-1, MenuPosY-7, NULL);
-	RenderWidgets(&ScreenButtons[8], 1, -1, MenuPosY-8, NULL);
+	RenderWidgets(&ScreenButtons[8], 1, (int)ScreenVSync-1, MenuPosY-8, NULL);
+	RenderWidgets(&ScreenButtons[9], 1, -1, MenuPosY-9, NULL);
 }
 
 static const Rect KeyboardDialogRect = {0, 0, 216, 306};
